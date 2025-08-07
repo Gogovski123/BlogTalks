@@ -1,44 +1,37 @@
-﻿using BlogTalks.Domain.Entities;
+﻿using BlogTalks.Domain.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogTalks.Application.Comments.Commands
 {
-    public class UpdateByIdHandler : IRequestHandler<UpdateCommentByIdCommand, UpdateByIdResponse>
+    public class UpdateByIdHandler : IRequestHandler<UpdateByIdRequest, UpdateByIdResponse>
     {
-        private readonly FakeDataStore _dataStore;
+        private readonly ICommentRepository _commentRepository;
 
-        public UpdateByIdHandler(FakeDataStore dataStore)
+        public UpdateByIdHandler(ICommentRepository commentRepository)
         {
-            _dataStore = dataStore;
+            _commentRepository = commentRepository;
         }
 
-        public async Task<UpdateByIdResponse> Handle(UpdateCommentByIdCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateByIdResponse> Handle(UpdateByIdRequest request, CancellationToken cancellationToken)
         {
-            var comment = await _dataStore.GetCommentById(request.Id);
-            if(comment == null)
+            var comment = _commentRepository.GetById(request.Id);
+            if (comment == null)
             {
                 return null;
             }
             
             comment.Text = request.Text;
-            comment.CreatedAt = request.CreatedAt;
-            comment.CreatedBy = request.CreatedBy;
-            comment.BlogPostID = request.BlogPostId;
+            
 
-            await _dataStore.UpdateCommentById(comment);
+            _commentRepository.Update(comment);
 
             return new UpdateByIdResponse
             {
-                Id = comment.Id,
+                //Id = comment.Id,
                 Text = comment.Text,
-                CreatedAt = comment.CreatedAt,
-                CreatedBy = comment.CreatedBy,
-                BlogPostId = comment.BlogPostID
+                //CreatedAt = comment.CreatedAt,
+                //CreatedBy = comment.CreatedBy,
+                //BlogPostId = comment.BlogPostID
             };
         }
     }

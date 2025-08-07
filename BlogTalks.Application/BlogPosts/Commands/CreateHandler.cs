@@ -1,38 +1,31 @@
-﻿using BlogTalks.Domain.Entities;
+﻿using BlogTalks.Domain.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogTalks.Application.BlogPosts.Commands
 {
     public class CreateHandler : IRequestHandler<CreateRequest, CreateResponse>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly IBlogPostRepository _blogPostRepository;
 
-        public CreateHandler(FakeDataStore fakeDataStore)
+        public CreateHandler(IBlogPostRepository blogPostRepository)
         {
-            _fakeDataStore = fakeDataStore;
+            _blogPostRepository = blogPostRepository;
         }
 
         public async Task<CreateResponse> Handle(CreateRequest request, CancellationToken cancellationToken)
         {
-            var BlogPost = new BlogTalks.Domain.Entities.BlogPost
+            var blogPost = new BlogTalks.Domain.Entities.BlogPost
             {
-                Id =  request.Response.Id,
-                Title = request.Response.Title,
-                Text = request.Response.Text,
-                Tags = request.Response.Tags ?? new List<string>(),
-                CreatedBy = request.Response.CreatedBy,
-                CreatedAt = request.Response.CreatedAt,
-                Comments = request.Response.Comments ?? new List<BlogTalks.Domain.Entities.Comment>()
+                Title = request.Title,
+                Text = request.Text,
+                Tags = request.Tags,
+                CreatedBy = 55,
+                CreatedAt = DateTime.UtcNow
             };
 
-            await _fakeDataStore.AddBlogPost(BlogPost);
+            _blogPostRepository.Add(blogPost);
 
-            return request.Response;
+            return new CreateResponse { Id = blogPost.Id };
         }
     }
 }

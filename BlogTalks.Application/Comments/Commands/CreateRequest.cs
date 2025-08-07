@@ -7,7 +7,5 @@ using System.Threading.Tasks;
 
 namespace BlogTalks.Application.Comments.Commands
 {
-    public record AddCommentCommand(CreateResponse CommentResponse) : IRequest<CreateResponse>;
-    
-    
+    public record CreateRequest(string Text, int BlogPostId) : IRequest<CreateResponse>;
 }

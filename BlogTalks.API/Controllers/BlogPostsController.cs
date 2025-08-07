@@ -20,47 +20,7 @@ namespace BlogTalks.API.Controllers
         {
             _mediator = mediator;
         }
-        public static List<BlogPostDTO> _blogPosts = new List<BlogPostDTO>
-        {
-            new BlogPostDTO
-            {
-                Id = 1,
-                Title = "First Blog Post",
-                Text = "This is the content of the first blog post.",
-                CreatedAt = DateTime.Now,
-                CreatedBy = 1,
-                Comments = new List<CommentDTO>
-                {
-                    new CommentDTO
-                    {
-                        Id = 1,
-                        Text = "Great post!",
-                        CreatedAt = DateTime.Now.AddMinutes(-5),
-                        CreatedBy = 2
-                    }
-                },
-                Tags = new List<string> { "Introduction", "Welcome" }
-            },
-            new BlogPostDTO
-            {
-                Id = 2,
-                Title = "Second Blog Post",
-                Text = "This is the content of the second blog post.",
-                CreatedAt = DateTime.Now.AddMinutes(-10),
-                CreatedBy = 1,
-                Comments = new List<CommentDTO>
-                {
-                    new CommentDTO
-                    {
-                        Id = 2,
-                        Text = "Interesting read!",
-                        CreatedAt = DateTime.Now.AddMinutes(-3),
-                        CreatedBy = 3
-                    }
-                },
-                Tags = new List<string> { "Update", "News" }
-            }
-        };
+        
         
         // GET: api/<BlogPostsController>
         [HttpGet]
@@ -84,31 +44,23 @@ namespace BlogTalks.API.Controllers
 
         // POST api/<BlogPostsController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CreateResponse createResponse)
+        public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
-            var blogPost = await _mediator.Send(new CreateRequest(createResponse));
-            return CreatedAtRoute("GetBlogPostById", new { id = blogPost.Id }, blogPost);
+            var response = await _mediator.Send(request);
+            return Ok(response);
         }
 
         // PUT api/<BlogPostsController>/5
         [HttpPut("{id}")]
-        public Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
+        public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
         {
-            if(id != request.Id)
+            var response = _mediator.Send(new UpdateByIdRequest(id, request.Title, request.Text, request.Tags));
+            if (response == null)
             {
-                return Task.FromResult<ActionResult>(BadRequest(new { message = "Blog post ID in the URL does not match the ID in the request body." }));
+                return NotFound();
             }
-            try
-            {
-                var updatedBlogPost = _mediator.Send(request);
-                return Task.FromResult<ActionResult>(Ok(updatedBlogPost));
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult<ActionResult>(BadRequest(new { message = ex.Message }));
-            }
+            return NoContent();
         }
-
         // DELETE api/<BlogPostsController>/5
         [HttpDelete("{id}", Name = "DeleteBlogPostById")]
         public async Task<ActionResult> Delete([FromRoute] int id)

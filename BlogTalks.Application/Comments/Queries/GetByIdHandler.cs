@@ -1,26 +1,21 @@
-﻿using BlogTalks.Domain.Entities;
+﻿using BlogTalks.Domain.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogTalks.Application.Comments.Queries
 {
     public class GetByIdHandler : IRequestHandler<GetByIdRequest, GetByIdResponse>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly ICommentRepository _commentRepository;
 
-        public GetByIdHandler(FakeDataStore fakeDataStore)
+        public GetByIdHandler(ICommentRepository commentRepository)
         {
-            _fakeDataStore = fakeDataStore;
+            _commentRepository = commentRepository;
         }
 
         public async Task<GetByIdResponse> Handle(GetByIdRequest request, CancellationToken cancellationToken)
         {
 
-            var comment = await _fakeDataStore.GetCommentById(request.id);
+            var comment = _commentRepository.GetById(request.id);
 
             if(comment == null)
             {

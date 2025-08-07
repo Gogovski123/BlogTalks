@@ -1,36 +1,30 @@
-﻿using BlogTalks.Domain.Entities;
+﻿using BlogTalks.Domain.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogTalks.Application.BlogPosts.Commands
 {
     public class UpdateByIdHandler : IRequestHandler<UpdateByIdRequest, UpdateByIdResponse>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly IBlogPostRepository _blogPostRepository;
 
-        public UpdateByIdHandler(FakeDataStore fakeDataStore)
+        public UpdateByIdHandler(IBlogPostRepository blogPostRepository)
         {
-            _fakeDataStore = fakeDataStore;
+            _blogPostRepository = blogPostRepository;
         }
-
 
         public async Task<UpdateByIdResponse> Handle(UpdateByIdRequest request, CancellationToken cancellationToken)
         {
-            var blogPost = await _fakeDataStore.GetBlogPostById(request.Id);
+            var blogPost = _blogPostRepository.GetById(request.Id);
             if (blogPost == null)
             {
                 return null;
             }
             blogPost.Title = request.Title;
             blogPost.Text = request.Text;
-            blogPost.Tags = request.Tags ?? new List<string>();
-            blogPost.CreatedBy = request.CreatedBy;
-            blogPost.CreatedAt = request.CreatedAt;
-            blogPost.Comments = request.Comments ?? new List<BlogTalks.Domain.Entities.Comment>();
+            blogPost.CreatedAt = DateTime.UtcNow;
+
+
+            _blogPostRepository.Update(blogPost);
 
             return new UpdateByIdResponse
             {
@@ -39,8 +33,8 @@ namespace BlogTalks.Application.BlogPosts.Commands
                 Text = blogPost.Text,
                 Tags = blogPost.Tags,
                 CreatedBy = blogPost.CreatedBy,
-                CreatedAt = blogPost.CreatedAt,
-                Comments = blogPost.Comments
+                CreatedAt = DateTime.UtcNow,
+
             };
 
         }
