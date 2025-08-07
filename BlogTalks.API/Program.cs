@@ -1,6 +1,9 @@
+using BlogTalks.API;
 using BlogTalks.API.DTOs;
 using BlogTalks.Application.Comment.Queries;
 using BlogTalks.Domain.Entities;
+using BlogTalks.Application;
+using BlogTalks.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +18,18 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => type.FullName);
 });
 
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(GetAllResponse).Assembly);
-});
+builder.Services
+    .AddPresentation()
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
+
+
+
+//builder.Services.AddMediatR(cfg =>
+//{
+//    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+//    cfg.RegisterServicesFromAssembly(typeof(GetAllResponse).Assembly);
+//});
 
 builder.Services.AddSingleton<FakeDataStore>();
 
@@ -28,6 +38,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

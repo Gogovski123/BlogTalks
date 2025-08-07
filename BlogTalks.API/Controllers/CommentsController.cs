@@ -1,5 +1,6 @@
 ﻿using BlogTalks.API.DTOs;
-using BlogTalks.Application.Comment.Queries;
+
+
 using BlogTalks.Application.Comments.Commands;
 using BlogTalks.Application.Comments.Queries;
 using MediatR;
@@ -43,36 +44,41 @@ namespace BlogTalks.API.Controllers
 
         // POST api/<CommentsController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CreateResponse response)
+        public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
-            var comment = await _mediator.Send(new AddCommentCommand(response));
-            return CreatedAtRoute("GetCommentById", new { id = comment.Id }, comment);
+            var response = await _mediator.Send(request);
+            return Ok(response);
         }
 
         // PUT api/<CommentsController>/5
         [HttpPut("{id}", Name = "UpdateCommentById")]
-        public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateCommentByIdCommand request)
+        public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
         {
-            if(id != request.Id)
+            //if(id != request.Id)
+            //{
+            //    return BadRequest(new { message = "Comment ID in the URL does not match the ID in the request body." });
+            //}
+            //try
+            //{
+            //    var comment = await _mediator.Send(request);
+            //    return Ok(comment);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(new { message = $"Not found!" });
+            //}
+            var response = await _mediator.Send(new UpdateByIdRequest(id, request.Text));
+            if (response == null)
             {
-                return BadRequest(new { message = "Comment ID in the URL does not match the ID in the request body." });
+                return NotFound(new { message = $"Comment with ID {id} not found." });
             }
-            try
-            {
-                var comment = await _mediator.Send(request);
-                return Ok(comment);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = $"Not found!" });
-            }
-
+            return Ok(response);
 
         }
 
         // DELETE api/<CommentsController>/5
         [HttpDelete("{id}", Name = "DeleteCommentById")]
-        public async Task<ActionResult> Delete([FromRoute] DeleteCommentByIdCommand request)
+        public async Task<ActionResult> Delete([FromRoute] DeleteByIdRequest request)
         {
             var comment = await _mediator.Send(request);
 
@@ -84,7 +90,7 @@ namespace BlogTalks.API.Controllers
         }
 
         // GET api/<CommentsController>/blogpost/5
-        [HttpGet("blogposts/{blogPostId}/comments", Name = "GetCommentsByBlogPostId")]
+        [HttpGet("/api/blogposts/{blogPostId}/comments")]
         public async Task<ActionResult> GetCommentsByBlogPostId([FromRoute] int blogPostId)
         {
             var comments = await _mediator.Send(new GetByBlogPostIdRequest(blogPostId));

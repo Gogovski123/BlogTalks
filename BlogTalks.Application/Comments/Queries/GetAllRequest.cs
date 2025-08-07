@@ -1,11 +1,7 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BlogTalks.Application.Comment.Queries;
+using MediatR;
 
-namespace BlogTalks.Application.Comment.Queries
+namespace BlogTalks.Application.Comments.Queries
 {
     public record GetAllRequest:IRequest<IEnumerable<GetAllResponse>>;
 }

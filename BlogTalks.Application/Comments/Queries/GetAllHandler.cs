@@ -1,31 +1,28 @@
-﻿using BlogTalks.Domain.Entities;
+﻿using BlogTalks.Application.Comments.Queries;
+using BlogTalks.Domain.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogTalks.Application.Comment.Queries
 {
     public class GetAllHandler : IRequestHandler<GetAllRequest, IEnumerable<GetAllResponse>>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly IRepository<BlogTalks.Domain.Entities.Comment> _commentRepository;
 
-        public GetAllHandler(FakeDataStore fakeDataStore)
+        public GetAllHandler(ICommentRepository commentRepository)
         {
-            _fakeDataStore = fakeDataStore;
+            _commentRepository = commentRepository;
         }
 
         public async Task<IEnumerable<GetAllResponse>> Handle(GetAllRequest request, CancellationToken cancellationToken)
         {
-            var comments = await _fakeDataStore.GetAllComments();
+
+            var comments = _commentRepository.GetAll();
 
             var response = comments.Select(c => new GetAllResponse
             {
                 Id = c.Id,
                 Text = c.Text,
-                CreatedAt = c.CreatedAt,
+                CreatedAt = DateTime.Now, // Assuming CreatedAt is set to current time for the response
                 CreatedBy = c.CreatedBy,
                 BlogPostID = c.BlogPostID
             });

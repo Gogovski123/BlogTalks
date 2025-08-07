@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogTalks.Domain.Entities
+namespace BlogTalks.Infrastructure.Data.DataContext
 {
-    public class Tag
+    internal static class Schemas
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+        public const string Default = "public";
     }
-
 }
