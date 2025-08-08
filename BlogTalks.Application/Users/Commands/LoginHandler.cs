@@ -31,10 +31,9 @@ namespace BlogTalks.Application.Users.Commands
 
             var fakeToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
 
+            
             return Task.FromResult(new LoginResponse
             {
-                Success = true,
-                Message = $"Welcome user { _userRepository.GetByEmail(request.Email).Name }!",
                 Token = fakeToken
             });
         }

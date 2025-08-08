@@ -67,10 +67,7 @@ namespace BlogTalks.API.Controllers
         public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {
             var response = await _mediator.Send(request);
-            if (!response.Success)
-            {
-                return Unauthorized(new { message = response.Message });
-            }
+            
             return Ok(response);
         }
 
@@ -90,7 +87,6 @@ namespace BlogTalks.API.Controllers
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
             var response = await _mediator.Send(new DeleteByIdRequest(id));
-
             return Ok(response);
         }
 
