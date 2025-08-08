@@ -54,19 +54,6 @@ namespace BlogTalks.API.Controllers
         [HttpPut("{id}", Name = "UpdateCommentById")]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
         {
-            //if(id != request.Id)
-            //{
-            //    return BadRequest(new { message = "Comment ID in the URL does not match the ID in the request body." });
-            //}
-            //try
-            //{
-            //    var comment = await _mediator.Send(request);
-            //    return Ok(comment);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest(new { message = $"Not found!" });
-            //}
             var response = await _mediator.Send(new UpdateByIdRequest(id, request.Text));
             if (response == null)
             {

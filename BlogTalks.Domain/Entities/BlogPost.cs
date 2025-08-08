@@ -17,7 +17,7 @@ namespace BlogTalks.Domain.Entities
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        
+
         //Navigation
         public List<Comment> Comments { get; set; } = new List<Comment>();
         
