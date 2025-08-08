@@ -4,8 +4,11 @@ namespace BlogTalks.Application.Users.Commands
 {
     public class LoginResponse
     {
-        public bool Success { get; set; }
-        public string Message { get; set; } = string.Empty;
-        public string Token { get; set; } = string.Empty;
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? Success { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Message { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Token { get; set; }
     }
 }

@@ -19,14 +19,14 @@ namespace BlogTalks.Application.Users.Commands
             
             if (user == null)
             {
-                return Task.FromResult(new LoginResponse { Success = false, Message = "User not found." });
+                return Task.FromResult(new LoginResponse { Message = "User not found." });
             }
 
             var passwordValid = PasswordHasher.VerifyPassword(request.Password, user.Password);
 
             if(!passwordValid)
             {
-                return Task.FromResult(new LoginResponse { Success = false, Message = "Invalid password." });
+                return Task.FromResult(new LoginResponse { Message = "Invalid password." });
             }
 
             var fakeToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
