@@ -19,6 +19,7 @@ namespace BlogTalks.Domain.Entities
         //Navigation
         public int BlogPostID { get; set; }
         public BlogPost BlogPost { get; set; } = new BlogPost();
+        
 
     }
 }

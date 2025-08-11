@@ -5,12 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogTalks.Infrastructure
 {
@@ -30,6 +24,7 @@ namespace BlogTalks.Infrastructure
             services.AddScoped<ApplicationDbContext>();
             services.AddTransient<IBlogPostRepository, BlogPostRepository>();
             services.AddTransient<ICommentRepository, CommentRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             return services;
         }
