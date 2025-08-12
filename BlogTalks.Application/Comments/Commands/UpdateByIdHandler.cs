@@ -1,15 +1,19 @@
-﻿using BlogTalks.Domain.Repositories;
+﻿using BlogTalks.Domain.Entities;
+using BlogTalks.Domain.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace BlogTalks.Application.Comments.Commands
 {
     public class UpdateByIdHandler : IRequestHandler<UpdateByIdRequest, UpdateByIdResponse>
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UpdateByIdHandler(ICommentRepository commentRepository)
+        public UpdateByIdHandler(ICommentRepository commentRepository, IHttpContextAccessor httpContextAccessor)
         {
             _commentRepository = commentRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<UpdateByIdResponse> Handle(UpdateByIdRequest request, CancellationToken cancellationToken)
@@ -19,7 +23,15 @@ namespace BlogTalks.Application.Comments.Commands
             {
                 return null;
             }
-            
+            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
+            if (!int.TryParse(userIdClaim, out int currentUserId))
+            {
+                return null;
+            }
+            if (comment.CreatedBy != currentUserId)
+            {
+                return null;
+            }
             comment.Text = request.Text;
             
 

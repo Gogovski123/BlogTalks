@@ -3,12 +3,14 @@ using BlogTalks.Application.BlogPost.Queries;
 using BlogTalks.Application.BlogPosts.Commands;
 using BlogTalks.Application.BlogPosts.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BlogTalks.API.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class BlogPostsController : ControllerBase
@@ -19,10 +21,12 @@ namespace BlogTalks.API.Controllers
         {
             _mediator = mediator;
         }
-        
-        
+
+
         // GET: api/<BlogPostsController>
+       
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetAll()
         {
             var blogPosts = await _mediator.Send(new GetAllRequest());
@@ -31,6 +35,7 @@ namespace BlogTalks.API.Controllers
 
         // GET api/<BlogPostsController>/5
         [HttpGet("{id}", Name = "GetBlogPostById")]
+        [Authorize]
         public async Task<ActionResult> Get([FromRoute] GetByIdRequest request)
         {
             var blogPost = await _mediator.Send(request);
@@ -43,6 +48,7 @@ namespace BlogTalks.API.Controllers
 
         // POST api/<BlogPostsController>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
             var response = await _mediator.Send(request);
@@ -51,6 +57,7 @@ namespace BlogTalks.API.Controllers
 
         // PUT api/<BlogPostsController>/5
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
         {
             var response = _mediator.Send(new UpdateByIdRequest(id, request.Title, request.Text, request.Tags));
@@ -62,6 +69,7 @@ namespace BlogTalks.API.Controllers
         }
         // DELETE api/<BlogPostsController>/5
         [HttpDelete("{id}", Name = "DeleteBlogPostById")]
+        [Authorize]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
             var blogPost = await _mediator.Send(new DeleteByIdRequest(id));

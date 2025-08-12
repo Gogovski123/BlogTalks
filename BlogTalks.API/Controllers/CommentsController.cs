@@ -1,15 +1,14 @@
-﻿using BlogTalks.API.DTOs;
-
-
-using BlogTalks.Application.Comments.Commands;
+﻿using BlogTalks.Application.Comments.Commands;
 using BlogTalks.Application.Comments.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BlogTalks.API.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
@@ -24,6 +23,7 @@ namespace BlogTalks.API.Controllers
         
         // GET: api/<CommentsController>
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> Get()
         {
             var comments = await _mediator.Send(new GetAllRequest());
@@ -32,6 +32,7 @@ namespace BlogTalks.API.Controllers
 
         // GET api/<CommentsController>/5
         [HttpGet("{id}", Name = "GetCommentById")]
+        [Authorize]
         public async Task<ActionResult> GetComment([FromRoute] GetByIdRequest request)
         {
             var comment = await _mediator.Send(request);
@@ -44,6 +45,7 @@ namespace BlogTalks.API.Controllers
 
         // POST api/<CommentsController>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
             var response = await _mediator.Send(request);
@@ -65,6 +67,7 @@ namespace BlogTalks.API.Controllers
 
         // DELETE api/<CommentsController>/5
         [HttpDelete("{id}", Name = "DeleteCommentById")]
+        [Authorize]
         public async Task<ActionResult> Delete([FromRoute] DeleteByIdRequest request)
         {
             var comment = await _mediator.Send(request);
@@ -78,6 +81,7 @@ namespace BlogTalks.API.Controllers
 
         // GET api/<CommentsController>/blogpost/5
         [HttpGet("/api/blogposts/{blogPostId}/comments")]
+        [Authorize]
         public async Task<ActionResult> GetCommentsByBlogPostId([FromRoute] int blogPostId)
         {
             var comments = await _mediator.Send(new GetByBlogPostIdRequest(blogPostId));

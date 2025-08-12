@@ -1,9 +1,8 @@
 using BlogTalks.API;
-using BlogTalks.API.DTOs;
-using BlogTalks.Application.Comment.Queries;
-using BlogTalks.Domain.Entities;
 using BlogTalks.Application;
+using BlogTalks.Domain.Entities;
 using BlogTalks.Infrastructure;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +12,41 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.CustomSchemaIds(type => type.FullName);
+
+    // Add JWT Bearer token support
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    // Correct and properly formatted security requirement
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Scheme = "Bearer"
+            },
+            Array.Empty<string>()
+        }
+    });
 });
+
 
 builder.Services
     .AddPresentation()
@@ -31,8 +61,6 @@ builder.Services
 //    cfg.RegisterServicesFromAssembly(typeof(GetAllResponse).Assembly);
 //});
 
-builder.Services.AddSingleton<FakeDataStore>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,6 +73,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

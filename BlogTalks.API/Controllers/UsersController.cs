@@ -1,10 +1,12 @@
 ﻿using BlogTalks.Application.Users.Commands;
 using BlogTalks.Application.Users.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogTalks.API.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -18,6 +20,7 @@ namespace BlogTalks.API.Controllers
 
         // GET: api/<UsersController>
         [HttpGet]
+       
         public async Task<ActionResult> Get()
         {
             var users = await _mediator.Send(new GetAllRequest());
@@ -51,6 +54,7 @@ namespace BlogTalks.API.Controllers
         }
 
         // POST api/<UsersController>/register
+        
         [HttpPost("register")]
         public async Task<ActionResult> Post([FromBody] RegisterRequest request)
         {
@@ -63,6 +67,7 @@ namespace BlogTalks.API.Controllers
         }
 
         // POST api/<UsersController>/login
+       
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {
