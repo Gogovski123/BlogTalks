@@ -1,11 +1,6 @@
-﻿using BlogTalks.Domain.Entities;
-using BlogTalks.Domain.Repositories;
+﻿using BlogTalks.Domain.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace BlogTalks.Application.Comments.Commands
 {
@@ -13,15 +8,25 @@ namespace BlogTalks.Application.Comments.Commands
     {
         private readonly ICommentRepository _commentRepository;
         private readonly IBlogPostRepository _blogPostRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateHandler(ICommentRepository commentRepository, IBlogPostRepository blogPostRepository)
+        public CreateHandler(ICommentRepository commentRepository, IBlogPostRepository blogPostRepository,
+            IHttpContextAccessor httpContextAccessor)
         {
             _commentRepository = commentRepository;
             _blogPostRepository = blogPostRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<CreateResponse> Handle(CreateRequest request, CancellationToken cancellationToken)
         {
+            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            {
+                throw new UnauthorizedAccessException("User is not authenticated.");
+            }
+
             var blogPost = _blogPostRepository.GetById(request.BlogPostId);
             if (blogPost == null)
             {
@@ -31,7 +36,7 @@ namespace BlogTalks.Application.Comments.Commands
             var comment = new BlogTalks.Domain.Entities.Comment
             {
                 Text = request.Text,
-                CreatedBy = 55,
+                CreatedBy = userId,
                 CreatedAt = DateTime.UtcNow,
                 BlogPostID = request.BlogPostId,
                 BlogPost = blogPost
