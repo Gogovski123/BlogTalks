@@ -16,19 +16,21 @@ namespace BlogTalks.API.Controllers
     public class BlogPostsController : ControllerBase
     {
         private readonly IMediator _mediator;
-
-        public BlogPostsController(IMediator mediator)
+        private readonly ILogger<BlogPostsController> _logger;
+        public BlogPostsController(IMediator mediator, ILogger<BlogPostsController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
 
         // GET: api/<BlogPostsController>
-       
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetAll()
         {
+            _logger.LogInformation("Fetching all blog posts.");
             var blogPosts = await _mediator.Send(new GetAllRequest());
             return Ok(blogPosts);
         }
@@ -38,6 +40,7 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Get([FromRoute] GetByIdRequest request)
         {
+            _logger.LogInformation($"Fetching blog post with ID {request.id}.");
             var blogPost = await _mediator.Send(request);
             if (blogPost == null)
             {
@@ -51,6 +54,7 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
+            _logger.LogInformation("Creating a new blog post.");
             var response = await _mediator.Send(request);
             return Ok(response);
         }
@@ -60,6 +64,7 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
         {
+            _logger.LogInformation($"Updating blog post with ID {id}.");
             var response = _mediator.Send(new UpdateByIdRequest(id, request.Title, request.Text, request.Tags));
             if (response == null)
             {
@@ -72,6 +77,7 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
+            _logger.LogInformation($"Deleting blog post with ID {id}.");
             var blogPost = await _mediator.Send(new DeleteByIdRequest(id));
 
             if (blogPost == null)
