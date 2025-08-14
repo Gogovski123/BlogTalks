@@ -14,18 +14,21 @@ namespace BlogTalks.API.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<CommentsController> _logger;
 
-        public CommentsController(IMediator mediator)
+        public CommentsController(IMediator mediator, ILogger<CommentsController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
-        
+
         // GET: api/<CommentsController>
         [HttpGet]
         [Authorize]
         public async Task<ActionResult> Get()
         {
+            _logger.LogInformation("Fetching all comments.");
             var comments = await _mediator.Send(new GetAllRequest());
             return Ok(comments);
         }
@@ -35,6 +38,7 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> GetComment([FromRoute] GetByIdRequest request)
         {
+            _logger.LogInformation($"Fetching comment with ID {request.id}.");
             var comment = await _mediator.Send(request);
             if (comment == null)
             {
@@ -48,6 +52,7 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
+            _logger.LogInformation("Creating a new comment.");
             var response = await _mediator.Send(request);
             return Ok(response);
         }
@@ -56,6 +61,7 @@ namespace BlogTalks.API.Controllers
         [HttpPut("{id}", Name = "UpdateCommentById")]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
         {
+            _logger.LogInformation($"Updating comment with ID {id}.");
             var response = await _mediator.Send(new UpdateByIdRequest(id, request.Text));
             if (response == null)
             {
@@ -70,6 +76,7 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Delete([FromRoute] DeleteByIdRequest request)
         {
+            _logger.LogInformation($"Deleting comment with ID {request.id}.");
             var comment = await _mediator.Send(request);
 
             if (comment == null)
@@ -84,6 +91,7 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> GetCommentsByBlogPostId([FromRoute] int blogPostId)
         {
+            _logger.LogInformation($"Fetching comments for Blog Post ID {blogPostId}.");
             var comments = await _mediator.Send(new GetByBlogPostIdRequest(blogPostId));
             if (comments == null)
             {
