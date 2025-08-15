@@ -35,15 +35,6 @@ namespace BlogTalks.Infrastructure
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
-            //services.Configure<JwtSettings>(options =>
-            //{
-            //    options.Issuer = configuration["JwtSettings:Issuer"] ?? string.Empty;
-            //    options.Audience = configuration["JwtSettings:Audience"] ?? string.Empty;
-            //    options.SecretKey = configuration["JwtSettings:SecretKey"] ?? string.Empty;
-            //    options.ExpiresInMinutes = int.TryParse(configuration["JwtSettings:ExpiresInMinutes"], out var expiresIn) ? expiresIn : 60;
-            //});
-            
-
             var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"] ?? string.Empty);
@@ -64,6 +55,22 @@ namespace BlogTalks.Infrastructure
                     ValidIssuer = jwtSettings.Issuer,
                     ValidAudience = jwtSettings.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                        if (!string.IsNullOrEmpty(authHeader))
+                        {
+                            if (authHeader.StartsWith("Bearer "))
+                                context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                            else
+                                context.Token = authHeader;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

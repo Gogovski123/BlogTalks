@@ -28,10 +28,24 @@ namespace BlogTalks.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetAll()
+        public async Task<ActionResult<GetAllResponse>> GetAll(
+            [FromQuery] int? pageNumber,
+            [FromQuery] int? pageSize,
+            [FromQuery] string? searchWord,
+            [FromQuery] string? tag)
         {
-            _logger.LogInformation("Fetching all blog posts.");
-            var blogPosts = await _mediator.Send(new GetAllRequest());
+            //_logger.LogInformation("Fetching all blog posts.");
+            _logger.LogInformation($"Fetching all blog posts with PageNumber: {pageNumber}, PageSize: {pageSize}, SearchWord: {searchWord}, Tag: {tag}.");
+
+            var request = new GetAllRequest
+            {
+                PageNumber = pageNumber ?? 1,
+                PageSize = pageSize ?? 10,
+                SearchWord = searchWord,
+                Tag = tag
+            };
+
+            var blogPosts = await _mediator.Send(request);
             return Ok(blogPosts);
         }
 
