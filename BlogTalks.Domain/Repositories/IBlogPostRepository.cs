@@ -1,14 +1,17 @@
 ﻿using BlogTalks.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BlogTalks.Domain.Shared;
 
 namespace BlogTalks.Domain.Repositories
 {
-    public interface IBlogPostRepository : IRepository<BlogTalks.Domain.Entities.BlogPost>
+    public interface IBlogPostRepository : IRepository<BlogPost>
     {
         BlogPost? GetBlogByName(string name);
+        (List<BlogPost> Results, int TotalCount) GetFiltered(
+            string? searchWord,
+            string? tag,
+            int? pageNumber,
+            int? pageSize
+        );
+
     }
 }

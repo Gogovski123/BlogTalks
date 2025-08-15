@@ -1,13 +1,10 @@
-﻿namespace BlogTalks.Application.BlogPost.Queries
+﻿using BlogTalks.Domain.Shared;
+
+namespace BlogTalks.Application.BlogPost.Queries
 {
     public class GetAllResponse
     {
-        public int Id { get; set; }
-        public required string Title { get; set; }
-        public string Text { get; set; } = string.Empty;
-        public List<string>? Tags { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public List<BlogTalks.Domain.Entities.Comment>? Comments { get; set; }
+        public List<BlogPostModel> BlogPosts { get; set; } = new List<BlogPostModel>();
+        public Metadata Metadata { get; set; }
     }
 }
