@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace BlogTalks.Application.BlogPost.Queries
+namespace BlogTalks.Application.BlogPosts.Queries
 {
     public class GetAllRequest : IRequest<GetAllResponse>
     {

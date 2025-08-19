@@ -1,6 +1,5 @@
 ﻿using BlogTalks.Domain.Entities;
 using BlogTalks.Domain.Repositories;
-using BlogTalks.Domain.Shared;
 using BlogTalks.Infrastructure.Data.DataContext;
 
 namespace BlogTalks.Infrastructure.Repositories

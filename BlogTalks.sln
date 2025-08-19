@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogTalks.Application", "Bl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogTalks.Infrastructure", "BlogTalks.Infrastructure\BlogTalks.Infrastructure.csproj", "{356128FD-7D94-4282-81F3-E368E4B62847}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogTalks.Test", "BlogTalks.Test\BlogTalks.Test.csproj", "{5DAD2920-9272-456C-AF03-B8C70DFE0FB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{356128FD-7D94-4282-81F3-E368E4B62847}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{356128FD-7D94-4282-81F3-E368E4B62847}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{356128FD-7D94-4282-81F3-E368E4B62847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DAD2920-9272-456C-AF03-B8C70DFE0FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DAD2920-9272-456C-AF03-B8C70DFE0FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DAD2920-9272-456C-AF03-B8C70DFE0FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DAD2920-9272-456C-AF03-B8C70DFE0FB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,10 +7,12 @@ namespace BlogTalks.API.Middlewares;
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-    public ExceptionHandlingMiddleware(RequestDelegate next)
+    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -21,6 +23,8 @@ public class ExceptionHandlingMiddleware
         }
         catch (ValidationException exception)
         {
+            _logger.LogWarning(exception, "Validation error occurred");
+
             var problemDetails = new ProblemDetails
             {
                 Status = StatusCodes.Status400BadRequest,
@@ -44,6 +48,8 @@ public class ExceptionHandlingMiddleware
         }
         catch (BlogTalksException exception)
         {
+            _logger.LogError(exception, "BlogTalksException occurred");
+
             context.Response.StatusCode = (int)exception.StatusCode;
             await context.Response.WriteAsync(exception.Message);
         }
