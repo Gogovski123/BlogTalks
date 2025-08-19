@@ -13,5 +13,7 @@ namespace BlogTalks.Domain.Repositories
             int? pageSize
         );
 
+        
+
     }
 }

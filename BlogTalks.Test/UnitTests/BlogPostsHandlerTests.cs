@@ -176,7 +176,9 @@ namespace BlogTalks.Test.UnitTests
             var mockRepo = new Mock<IBlogPostRepository>();
             mockRepo.Setup(r => r.GetById(1)).Returns(blogPost);
 
-            var handler = new GetByIdHandler(mockRepo.Object);
+            var mockCommentRepo = new Mock<ICommentRepository>();
+
+            var handler = new GetByIdHandler(mockRepo.Object, mockCommentRepo.Object);
             var request = new GetByIdRequest(1);
 
             // Act
@@ -194,7 +196,9 @@ namespace BlogTalks.Test.UnitTests
             var mockRepo = new Mock<IBlogPostRepository>();
             mockRepo.Setup(r => r.GetById(1)).Returns((BlogPost)null!);
 
-            var handler = new GetByIdHandler(mockRepo.Object);
+            var mockCommentRepo = new Mock<ICommentRepository>();
+
+            var handler = new GetByIdHandler(mockRepo.Object, mockCommentRepo.Object);
 
             // Act & Assert
             await Assert.ThrowsAsync<BlogTalksException>(() =>

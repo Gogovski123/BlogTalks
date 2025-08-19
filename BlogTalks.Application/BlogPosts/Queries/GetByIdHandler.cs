@@ -7,11 +7,15 @@ namespace BlogTalks.Application.BlogPosts.Queries
     public class GetByIdHandler : IRequestHandler<GetByIdRequest, GetByIdResponse>
     {
         private readonly IBlogPostRepository _blogPostRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public GetByIdHandler(IBlogPostRepository blogPostRepository)
+        public GetByIdHandler(IBlogPostRepository blogPostRepository, ICommentRepository commentRepository)
         {
             _blogPostRepository = blogPostRepository;
+            _commentRepository = commentRepository;
         }
+
+
 
         public async Task<GetByIdResponse> Handle(GetByIdRequest request, CancellationToken cancellationToken)
         {
@@ -20,6 +24,7 @@ namespace BlogTalks.Application.BlogPosts.Queries
             {
                 throw new BlogTalksException($"Blog post with ID {request.id} not found.");
             }
+            //var comments = _commentRepository.GetCommentsByBlogPostId(request.id);
             return new GetByIdResponse
             {
                 Id = blogPost.Id,

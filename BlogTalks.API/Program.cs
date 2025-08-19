@@ -1,6 +1,7 @@
 using BlogTalks.API;
 using BlogTalks.API.Middlewares;
 using BlogTalks.Application;
+using BlogTalks.EmailSenderAPI.Services;
 using BlogTalks.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -63,6 +64,13 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+builder.Services.AddHttpClient("EmailSenderApi", client =>
+{
+    var config = builder.Configuration.GetSection("Services:EmailSenderApi");
+    client.BaseAddress = new Uri(config["Url"]);
+});
 
 
 //builder.Services.AddMediatR(cfg =>
