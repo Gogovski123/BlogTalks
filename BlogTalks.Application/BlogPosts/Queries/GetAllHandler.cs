@@ -1,4 +1,4 @@
-﻿using BlogTalks.Application.BlogPost.Queries;
+﻿using BlogTalks.Application.BlogPosts.Queries;
 using BlogTalks.Domain.Repositories;
 using BlogTalks.Domain.Shared;
 using MediatR;

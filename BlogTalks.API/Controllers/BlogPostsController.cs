@@ -1,5 +1,4 @@
-﻿using BlogTalks.Application.BlogPost.Queries;
-using BlogTalks.Application.BlogPosts.Commands;
+﻿using BlogTalks.Application.BlogPosts.Commands;
 using BlogTalks.Application.BlogPosts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
