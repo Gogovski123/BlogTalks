@@ -1,5 +1,4 @@
-﻿using BlogTalks.API.DTOs;
-using BlogTalks.Application.BlogPost.Queries;
+﻿using BlogTalks.Application.BlogPost.Queries;
 using BlogTalks.Application.BlogPosts.Commands;
 using BlogTalks.Application.BlogPosts.Queries;
 using MediatR;
@@ -34,7 +33,6 @@ namespace BlogTalks.API.Controllers
             [FromQuery] string? searchWord,
             [FromQuery] string? tag)
         {
-            //_logger.LogInformation("Fetching all blog posts.");
             _logger.LogInformation($"Fetching all blog posts with PageNumber: {pageNumber}, PageSize: {pageSize}, SearchWord: {searchWord}, Tag: {tag}.");
 
             var request = new GetAllRequest
@@ -56,10 +54,10 @@ namespace BlogTalks.API.Controllers
         {
             _logger.LogInformation($"Fetching blog post with ID {request.id}.");
             var blogPost = await _mediator.Send(request);
-            if (blogPost == null)
-            {
-                return NotFound(new { message = $"Blog post with ID {request.id} not found." });
-            }
+            //if (blogPost == null)
+            //{
+            //    return NotFound(new { message = $"Blog post with ID {request.id} not found." });
+            //}
             return Ok(blogPost);
         }
 
@@ -80,10 +78,10 @@ namespace BlogTalks.API.Controllers
         {
             _logger.LogInformation($"Updating blog post with ID {id}.");
             var response = _mediator.Send(new UpdateByIdRequest(id, request.Title, request.Text, request.Tags));
-            if (response == null)
-            {
-                return NotFound();
-            }
+            //if (response == null)
+            //{
+            //    return NotFound();
+            //}
             return NoContent();
         }
         // DELETE api/<BlogPostsController>/5
@@ -94,10 +92,10 @@ namespace BlogTalks.API.Controllers
             _logger.LogInformation($"Deleting blog post with ID {id}.");
             var blogPost = await _mediator.Send(new DeleteByIdRequest(id));
 
-            if (blogPost == null)
-            {
-                return NotFound(new { message = $"Blog post with ID { id } not found." });
-            }
+            //if (blogPost == null)
+            //{
+            //    return NotFound(new { message = $"Blog post with ID { id } not found." });
+            //}
 
             return NoContent();
         }

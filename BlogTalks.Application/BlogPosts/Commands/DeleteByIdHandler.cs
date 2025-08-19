@@ -1,11 +1,6 @@
-﻿using BlogTalks.Domain.Entities;
+﻿using BlogTalks.Domain.Exceptions;
 using BlogTalks.Domain.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogTalks.Application.BlogPosts.Commands
 {
@@ -23,7 +18,7 @@ namespace BlogTalks.Application.BlogPosts.Commands
             var blogPost = _blogPostRepository.GetById(request.Id);
             if (blogPost == null)
             {
-                return null;
+                throw new BlogTalksException($"Blog post with ID {request.Id} not found.");
             }
             _blogPostRepository.Delete(blogPost);
 

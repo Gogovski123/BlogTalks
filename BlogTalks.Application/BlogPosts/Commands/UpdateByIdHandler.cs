@@ -1,4 +1,4 @@
-﻿using BlogTalks.Domain.Entities;
+﻿using BlogTalks.Domain.Exceptions;
 using BlogTalks.Domain.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +21,7 @@ namespace BlogTalks.Application.BlogPosts.Commands
             var blogPost = _blogPostRepository.GetById(request.Id);
             if (blogPost == null)
             {
-                return null;
+                throw new BlogTalksException($"Blog post with ID {request.Id} not found.");
             }
             var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
             if (!int.TryParse(userIdClaim, out int currentUserId))
