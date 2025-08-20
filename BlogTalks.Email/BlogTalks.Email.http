@@ -1,0 +1,6 @@
+@BlogTalks.Email_HostAddress = http://localhost:5121
+
+GET {{BlogTalks.Email_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

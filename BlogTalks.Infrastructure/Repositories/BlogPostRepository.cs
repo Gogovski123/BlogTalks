@@ -1,6 +1,7 @@
 ﻿using BlogTalks.Domain.Entities;
 using BlogTalks.Domain.Repositories;
 using BlogTalks.Infrastructure.Data.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogTalks.Infrastructure.Repositories
 {
@@ -14,6 +15,7 @@ namespace BlogTalks.Infrastructure.Repositories
             return _dbSet.FirstOrDefault(b => b.Title.Equals(name));
         }
 
+        
         public (List<BlogPost> Results, int TotalCount) GetFiltered(string? searchWord, string? tag, int? pageNumber, int? pageSize)
         {
             var query = _dbSet.AsQueryable();

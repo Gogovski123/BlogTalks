@@ -13,10 +13,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BlogTalks.Domain\BlogTalks.Domain.csproj" />
+    <ProjectReference Include="..\BlogTalks.EmailSenderAPI\BlogTalks.EmailSenderAPI.csproj" />
   </ItemGroup>
 
 </Project>

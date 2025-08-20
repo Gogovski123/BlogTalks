@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="13.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BlogTalks.EmailSenderAPI\BlogTalks.EmailSenderAPI.csproj" />
     <ProjectReference Include="..\BlogTalks.Infrastructure\BlogTalks.Infrastructure.csproj" />
   </ItemGroup>
 
