@@ -6,7 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IEmailService, EmailService>();
+
+
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
@@ -24,7 +27,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapPost("/email", (EmailDto request, IEmailService emailService) =>
+app.MapPost("/email", (EmailDto request, IEmailSender emailService) =>
 {
     emailService.SendEmailAsync(request);
 
