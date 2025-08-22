@@ -11,6 +11,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
+builder.Services.AddHostedService<RabbitMqBackgroundEmailService>();
+builder.Services.Configure<RabbitMqSettingsEmailSender>(builder.Configuration.GetSection("RabbitMQ"));
+builder.Services.AddSingleton(builder.Configuration
+    .GetSection("RabbitMQ")
+    .Get<RabbitMqSettingsEmailSender>());
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
