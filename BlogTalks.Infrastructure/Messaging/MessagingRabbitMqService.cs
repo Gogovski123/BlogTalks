@@ -1,6 +1,4 @@
 ﻿using BlogTalks.Application.Abstractions;
-using BlogTalks.Application.Contracts;
-using BlogTalks.EmailSenderAPI.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;

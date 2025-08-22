@@ -20,6 +20,7 @@ namespace BlogTalks.EmailSenderAPI.Services
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(request.From));
             email.To.Add(MailboxAddress.Parse(request.To));
+
             email.Subject = request.Subject;
             email.Body = new TextPart(TextFormat.Html) { Text = request.Body };
 

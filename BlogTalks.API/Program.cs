@@ -1,6 +1,7 @@
 using BlogTalks.API;
 using BlogTalks.API.Middlewares;
 using BlogTalks.Application;
+using BlogTalks.EmailSenderAPI.Models;
 using BlogTalks.Infrastructure;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
