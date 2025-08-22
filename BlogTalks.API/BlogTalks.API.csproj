@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BlogTalks.EmailSenderAPI\BlogTalks.EmailSenderAPI.csproj" />
     <ProjectReference Include="..\BlogTalks.Infrastructure\BlogTalks.Infrastructure.csproj" />
   </ItemGroup>
 

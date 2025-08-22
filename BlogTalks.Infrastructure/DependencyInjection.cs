@@ -2,6 +2,7 @@
 using BlogTalks.Domain.Repositories;
 using BlogTalks.Infrastructure.Authentication;
 using BlogTalks.Infrastructure.Data.DataContext;
+using BlogTalks.Infrastructure.Messaging;
 using BlogTalks.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +35,21 @@ namespace BlogTalks.Infrastructure
 
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<MessagingHttpService>(sp =>
+            {
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = factory.CreateClient("EmailSenderApi");
+                return new MessagingHttpService(client);
+            });
+
+            services.AddKeyedTransient<IMessagingService, MessagingHttpService>("MessagingHttpService",
+                (sp, _) => sp.GetRequiredService<MessagingHttpService>());
+
+
+            services.AddKeyedTransient<IMessagingService, MessagingRabbitMqService>("MessagingRabbitMQService");
+
+
 
             var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));

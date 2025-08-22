@@ -2,7 +2,7 @@
 
 namespace BlogTalks.EmailSenderAPI.Services
 {
-    public interface IEmailService
+    public interface IEmailSender
     {
         Task SendEmailAsync(EmailDto request);
     }

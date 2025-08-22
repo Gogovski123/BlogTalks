@@ -1,8 +1,8 @@
 using BlogTalks.API;
 using BlogTalks.API.Middlewares;
 using BlogTalks.Application;
-using BlogTalks.EmailSenderAPI.Services;
 using BlogTalks.Infrastructure;
+using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -63,14 +63,18 @@ builder.Services
     .AddPresentation()
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
+builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMQ"));
 
-builder.Services.AddScoped<IEmailService, EmailService>();
+//builder.Services.AddScoped<IEmailService, EmailHttpService>();
 
 builder.Services.AddHttpClient("EmailSenderApi", client =>
 {
     var config = builder.Configuration.GetSection("Services:EmailSenderApi");
     client.BaseAddress = new Uri(config["Url"]);
 });
+
+builder.Services.AddFeatureManagement();
+
 
 
 //builder.Services.AddMediatR(cfg =>
@@ -97,5 +101,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//app.MapPost("/email", (EmailDto request, IEmailService emailService) =>
+//{
+//    emailService.SendEmailAsync(request);
+
+//    return Results.Ok();
+//});
 
 app.Run();
